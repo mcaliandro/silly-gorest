@@ -1,4 +1,4 @@
-module gitlab.tyto.it/mcaliandro/silly-gorest
+module github.com/mcaliandro/silly-gorest
 
 go 1.20
 

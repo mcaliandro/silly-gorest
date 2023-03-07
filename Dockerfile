@@ -1,9 +1,15 @@
-FROM golang:1.20-alpine
+FROM golang:1.20-alpine AS builder
+WORKDIR /build
+# download dependencies
+COPY go.mod go.sum ./
+RUN go mod download
+# build binary
+COPY . ./
+RUN go build
 
-ENV PORT=8080
-
-RUN mkdir /app
-COPY bin/silly-gorest /app/silly-gorest
-
-EXPOSE ${PORT}
-ENTRYPOINT [ "/app/silly-gorest" ]
+# Create final image
+FROM alpine:latest
+WORKDIR /
+COPY --from=builder /build/silly-gorest .
+EXPOSE 8000
+ENTRYPOINT [ "./silly-gorest" ]

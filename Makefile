@@ -1,5 +1,5 @@
 BIN_FILE=silly-gorest
-DOCKER_REGISTRY=<specify-url>
+DOCKER_REGISTRY=<registry-url>
 PROJECT_NAME=silly-gorest
 PROJECT_VERS=0.1
 
