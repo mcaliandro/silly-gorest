@@ -5,7 +5,7 @@ COPY go.mod go.sum ./
 RUN go mod download
 # build binary
 COPY . ./
-RUN go build
+RUN go build -o silly-gorest .
 
 # Create final image
 FROM alpine:latest
