@@ -14,11 +14,16 @@ spec:
       image: gcr.io/kaniko-project/executor:debug
       command: ["/bin/sh", "-c", "sleep infinity"]
       env:
-        - name: CONTAINER_REGISTRY
+        - name: REGISTRY
           valueFrom:
             configMapKeyRef:
               name: registry-info
-              key: CONTAINER_REGISTRY
+              key: PRIVATE_REGISTRY
+		- name: NAMESPACE
+		  valueFrom:
+		    configMapKeyRef:
+			  name: registry-info
+			  key: PRIVATE_NAMESPACE
         - name: IMAGE_NAME
           value: "silly-gorest"
         - name: IMAGE_TAG
@@ -59,7 +64,7 @@ spec:
                     /kaniko/executor \
                         --dockerfile=`pwd`/Dockerfile \
 						--context=`pwd` \
-                        --destination=${CONTAINER_REGISTRY}/${IMAGE_NAME}:${IMAGE_TAG} \
+                        --destination=${REGISTRY}/${NAMESPACE}/${IMAGE_NAME}:${IMAGE_TAG} \
 						--verbosity debug
                     '''
                 }
