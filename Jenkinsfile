@@ -23,7 +23,7 @@ spec:
           valueFrom:
             configMapKeyRef:
               name: registry-info
-             key: PRIVATE_NAMESPACE
+              key: PRIVATE_NAMESPACE
         - name: IMAGE_NAME
           value: "silly-gorest"
         - name: IMAGE_TAG
