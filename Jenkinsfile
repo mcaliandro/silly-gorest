@@ -20,10 +20,10 @@ spec:
               name: registry-info
               key: PRIVATE_REGISTRY
 		- name: NAMESPACE
-		  valueFrom:
-		    configMapKeyRef:
-			  name: registry-info
-			  key: PRIVATE_NAMESPACE
+          valueFrom:
+            configMapKeyRef:
+              name: registry-info
+             key: PRIVATE_NAMESPACE
         - name: IMAGE_NAME
           value: "silly-gorest"
         - name: IMAGE_TAG
