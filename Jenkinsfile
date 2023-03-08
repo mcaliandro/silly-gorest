@@ -21,16 +21,14 @@ spec:
     node(POD_LABEL) {
         stage('Build and publish') {
             container('go') {
-                steps {
-                    echo "Download project dependencies..."
-                    sh 'go mod download'
-                    echo "Perfrom unit test..."
-                    sh 'go test'
-                    echo "Download 'ko' builder"
-                    sh 'go get github.com/google/ko@latest'
-                    echo "Build a container image..."
-                    sh 'ko build .'
+                stage('shell') {
+                    sh '''
+                    echo "Download project dependencies..." && go mod download
+                    echo "Perfrom unit test..." && go test
+                    echo "Download 'ko' builder" && go get github.com/google/ko@latest
+                    echo "Build a container image..." && ko build .
                     echo "Completed!"
+                    '''
                 }
             }
         }
