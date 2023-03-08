@@ -20,6 +20,7 @@ spec:
 ''') {
     node(POD_LABEL) {
         stage('Build and publish') {
+            git url: 'https://github.com/mcaliandro/silly-gorest.git', branch: 'main'
             container('go') {
                 stage('shell') {
                     sh '''
