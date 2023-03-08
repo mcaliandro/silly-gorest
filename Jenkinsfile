@@ -24,10 +24,14 @@ spec:
             container('go') {
                 stage('shell') {
                     sh '''
-                    echo "Download project dependencies..." && go mod download
-                    echo "Perfrom unit test..." && go test
-                    echo "Download 'ko' builder" && go get github.com/google/ko@latest
-                    echo "Build a container image..." && ko build .
+                    echo "Download project dependencies..."
+                    go mod download
+                    echo "Perfrom unit test..."
+                    go test
+                    echo "Download ko builder"
+                    go get github.com/google/ko@latest
+                    echo "Build a container image..."
+                    ./go/bin/ko build .
                     echo "Completed!"
                     '''
                 }
