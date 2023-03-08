@@ -19,7 +19,7 @@ spec:
             configMapKeyRef:
               name: registry-info
               key: PRIVATE_REGISTRY
-		- name: NAMESPACE
+        - name: NAMESPACE
           valueFrom:
             configMapKeyRef:
               name: registry-info
