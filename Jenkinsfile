@@ -9,10 +9,10 @@ spec:
   containers:
     - name: go
       image: golang:1.20-alpine
-      imagePullPolicy: IfNotPresent
+      command: ["/bin/sh", "-c", "sleep infinity"]
     - name: kaniko
       image: gcr.io/kaniko-project/executor:debug
-      imagePullPolicy: IfNotPresent
+      command: ["/bin/sh", "-c", "sleep infinity"]
       env:
         - name: CONTAINER_REGISTRY
           valueFrom:
@@ -59,7 +59,8 @@ spec:
                     /kaniko/executor \
                         --dockerfile=`pwd`/Dockerfile \
 						--context=`pwd` \
-                        --destination=${CONTAINER_REGISTRY}/${IMAGE_NAME}:${IMAGE_TAG}
+                        --destination=${CONTAINER_REGISTRY}/${IMAGE_NAME}:${IMAGE_TAG} \
+						--verbosity debug
                     '''
                 }
             }
