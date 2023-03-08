@@ -1,4 +1,7 @@
-podTemplate(yaml: '''
+pipeline {
+	agent {
+		kubernetes {
+			yaml '''
 apiVersion: v1
 kind: Pod
 spec:
@@ -6,10 +9,23 @@ spec:
   containers:
     - name: go
       image: golang:1.20-alpine
-      command: ["/bin/sh", "-c", "sleep 300"]
+      imagePullPolicy: IfNotPresent
+    - name: kaniko
+      image: gcr.io/kaniko-project/executor:debug
+      imagePullPolicy: IfNotPresent
+	  env:
+	    - name: CONTAINER_REGISTRY
+		  valueFrom:
+		    configMapKeyRef:
+			  name: registry-info
+			  key: CONTAINER_REGISTRY
+		- name: IMAGE_NAME
+		  value: "silly-gorest"
+		- name: IMAGE_TAG
+		  value: "latest"
       volumeMounts:
         - name: docker-secret
-          mountPath: /root/.docker
+          mountPath: /kaniko/.docker
   volumes:
     - name: docker-secret
       secret:
@@ -17,23 +33,33 @@ spec:
         items:
           - key: .dockerconfigjson
             path: config.json
-''') {
-    node(POD_LABEL) {
-        stage('Build and publish') {
-            git url: 'https://github.com/mcaliandro/silly-gorest.git', branch: 'main'
-            container('go') {
-                stage('shell') {
+'''
+		}
+	}
+    stages {
+		// 
+        stage('Testing') {
+			steps {
+				git url: 'https://github.com/mcaliandro/silly-gorest.git', branch: 'main'
+            	container('go') {
                     sh '''
-                    export PATH="$HOME/go/bin:$PATH"
                     echo "Download project dependencies..."
                     go mod download
                     echo "Perfrom unit test..."
                     go test
-                    echo "Download ko builder"
-                    go get github.com/google/ko@latest
-                    echo "Build a container image..."
-                    ko build .
-                    echo "Completed!"
+                    '''
+                }
+            }
+        }
+		// 
+        stage('Publish') {
+			steps {
+            	container('kaniko') {
+                    sh '''
+                    /kaniko/executor \
+                        --dockerfile=`pwd`/Dockerfile \
+						--context=`pwd` \
+                        --destination=${CONTAINER_REGISTRY}/${IMAGE_NAME}:${IMAGE_TAG}
                     '''
                 }
             }
