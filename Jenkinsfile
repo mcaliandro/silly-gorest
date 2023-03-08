@@ -13,16 +13,16 @@ spec:
     - name: kaniko
       image: gcr.io/kaniko-project/executor:debug
       imagePullPolicy: IfNotPresent
-	  env:
-	    - name: CONTAINER_REGISTRY
-		  valueFrom:
-		    configMapKeyRef:
-			  name: registry-info
-			  key: CONTAINER_REGISTRY
-		- name: IMAGE_NAME
-		  value: "silly-gorest"
-		- name: IMAGE_TAG
-		  value: "latest"
+      env:
+        - name: CONTAINER_REGISTRY
+          valueFrom:
+            configMapKeyRef:
+              name: registry-info
+              key: CONTAINER_REGISTRY
+        - name: IMAGE_NAME
+          value: "silly-gorest"
+        - name: IMAGE_TAG
+          value: "latest"
       volumeMounts:
         - name: docker-secret
           mountPath: /kaniko/.docker
