@@ -30,6 +30,7 @@ spec:
                     sh 'go get github.com/google/ko@latest'
                     echo "Build a container image..."
                     sh 'ko build .'
+                    echo "Completed!"
                 }
             }
         }
