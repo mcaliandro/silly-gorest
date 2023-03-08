@@ -24,6 +24,7 @@ spec:
             container('go') {
                 stage('shell') {
                     sh '''
+                    export PATH="$HOME/go/bin:$PATH"
                     echo "Download project dependencies..."
                     go mod download
                     echo "Perfrom unit test..."
@@ -31,7 +32,7 @@ spec:
                     echo "Download ko builder"
                     go get github.com/google/ko@latest
                     echo "Build a container image..."
-                    ./go/bin/ko build .
+                    ko build .
                     echo "Completed!"
                     '''
                 }
